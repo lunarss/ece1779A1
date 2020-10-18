@@ -32,8 +32,34 @@ def file_upload():
 
     # A1 codes starts
     # save upload image
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    # TODO change absolute path
     path = '/home/ubuntu/Desktop/A1/app/'
+    # TODO add userID before timestamp
     uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + new_file.filename
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     new_file.save(os.path.join(path,'Upload_Image/', uploadImgName))
     # change cwd for linux command execution
     os.chdir(path + 'FaceMaskDetection/')
@@ -73,8 +99,30 @@ def file_upload():
     # delete temporary files
     os.system('sudo rm -rf tmp/img_info.txt')
     os.system('mv tmp/test_' + uploadImgName + ' ../Output_Image/test_' + uploadImgName)
-    # fetch test image path
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    # fetch test image path (TODO, error on showing images on the browser)
     testImgPath = path + 'Output_Image/' + uploadImgName
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     return render_template('/fileupload/view.html', img = testImgPath, category = image_category, description = image_class_str)
     # A1 codes ends
 
