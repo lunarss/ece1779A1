@@ -68,6 +68,6 @@ def file_upload():
     # fetch image path
     imgName = path + 'Output_Image/' + new_file.filename
     return render_template('/fileupload/view.html', img = imgName, category = image_category)
-    # A1 codes starts
+    # A1 codes ends
 
 
