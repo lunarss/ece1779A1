@@ -111,7 +111,7 @@ def file_upload():
     
     
     # fetch test image path (TODO, error on showing images on the browser)
-    testImgPath = path + 'Output_Image/' + uploadImgName
+    testImgPath = path + 'Output_Image/test_' + uploadImgName
     
     
     
