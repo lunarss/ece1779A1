@@ -13,4 +13,4 @@
     # A1 codes ends
 ```    
 
-**(目前的问题是fileupload.py最后return的imgPath无法在网页上显示)**
+**(目前的问题是fileupload.py最后return的testImgName无法在网页上显示)**
