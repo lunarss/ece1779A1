@@ -50,24 +50,29 @@ def file_upload():
     f.close()
     # determine image category
     image_category = 0
-    # no face wearing mask
-    if (image_class[0] + image_class[1]) == 0:
+    image_class_str = ''
+    # no face detected
+    if (image_class[0] == 0) and (image_class[1] == 0):
         image_category = 1
+        image_class_str = 'no face detected'
     # all wearing masks
     elif (not image_class[0] == 0) and (image_class[1] == 0):
         image_category = 2
+        image_class_str = 'all wearing masks'
     # no one wearing mask
     elif (image_class[0] == 0) and (not image_class[1] == 0):
         image_category = 3
+        image_class_str = 'no one wearing mask'
     # some faces wearing masks
     elif (not image_class[0] == 0) and (not image_class[1] == 0):
         image_category = 4
+        image_class_str = 'some faces wearing masks'
     # delete temporary files
     os.system('sudo rm -rf tmp/img_info.txt')
     os.system('mv tmp/' + new_file.filename + ' ../Output_Image/' + new_file.filename)
     # fetch image path
     imgName = path + 'Output_Image/' + new_file.filename
-    return render_template('/fileupload/view.html', img = imgName, category = image_category)
+    return render_template('/fileupload/view.html', img = imgName, category = image_category, description = image_class_str)
     # A1 codes ends
 
 
