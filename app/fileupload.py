@@ -1,6 +1,8 @@
 from flask import render_template, redirect, url_for, request
 from app import webapp
 
+from datetime import datetime
+import time
 import tempfile
 import os
 
@@ -31,11 +33,12 @@ def file_upload():
     # A1 codes starts
     # save upload image
     path = '/home/ubuntu/Desktop/A1/app/'
-    new_file.save(os.path.join(path,'Upload_Image/',new_file.filename))
+    uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + new_file.filename
+    new_file.save(os.path.join(path,'Upload_Image/', uploadImgName))
     # change cwd for linux command execution
     os.chdir(path + 'FaceMaskDetection/')
     # run image test
-    cmd = 'python3 pytorch_test.py --img-path ../Upload_Image/' + new_file.filename
+    cmd = 'python3 pytorch_test.py --img-path ../Upload_Image/' + uploadImgName
     os.system(cmd)
     # image_class stores image class information: [#green, #red]
     f = open(path + "FaceMaskDetection/tmp/img_info.txt", "r")
@@ -69,12 +72,10 @@ def file_upload():
         image_class_str = 'some faces wearing masks'
     # delete temporary files
     os.system('sudo rm -rf tmp/img_info.txt')
-    os.system('mv tmp/' + new_file.filename + ' ../Output_Image/' + new_file.filename)
+    os.system('mv tmp/test_' + uploadImgName + ' ../Output_Image/test_' + uploadImgName)
     # fetch test image path
-    testImgName = path + 'Output_Image/' + new_file.filename
-    # fetch uploaded image path
-    uploadImgName = path + 'Upload_Image/' + new_file.filename
-    return render_template('/fileupload/view.html', img = testImgName, category = image_category, description = image_class_str)
+    testImgPath = path + 'Output_Image/' + uploadImgName
+    return render_template('/fileupload/view.html', img = testImgPath, category = image_category, description = image_class_str)
     # A1 codes ends
 
 
