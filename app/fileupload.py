@@ -70,9 +70,11 @@ def file_upload():
     # delete temporary files
     os.system('sudo rm -rf tmp/img_info.txt')
     os.system('mv tmp/' + new_file.filename + ' ../Output_Image/' + new_file.filename)
-    # fetch image path
-    imgName = path + 'Output_Image/' + new_file.filename
-    return render_template('/fileupload/view.html', img = imgName, category = image_category, description = image_class_str)
+    # fetch test image path
+    testImgName = path + 'Output_Image/' + new_file.filename
+    # fetch uploaded image path
+    uploadImgName = path + 'Upload_Image/' + new_file.filename
+    return render_template('/fileupload/view.html', img = testImgName, category = image_category, description = image_class_str)
     # A1 codes ends
 
 
