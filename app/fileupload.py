@@ -37,8 +37,7 @@ def file_upload():
     
     
     
-    # TODO change absolute path
-    path = '/home/ubuntu/Desktop/A1/app/'
+
     # TODO add userID before timestamp
     uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + new_file.filename
 
