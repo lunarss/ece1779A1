@@ -49,19 +49,19 @@ def file_upload():
     
     
     
-    new_file.save(os.path.join(path,'Upload_Image/', uploadImgName))
+    new_file.save(os.path.join(webapp.config['APP_PATH'],'Upload_Image/', uploadImgName))
     # check image size
-    if os.stat(path + 'Upload_Image/' + uploadImgName).st_size > (64 * 1024 * 1024):
-        os.system('rm ' + path + 'Upload_Image/' + uploadImgName)
+    if os.stat(webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName).st_size > (64 * 1024 * 1024):
+        os.system('rm ' + webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName)
         return 'File too large'
         
     # change cwd for linux command execution
-    os.chdir(path + 'FaceMaskDetection/')
+    os.chdir(webapp.config['APP_PATH'] + 'FaceMaskDetection/')
     # run image test
     cmd = 'python3 pytorch_test.py --img-path ../Upload_Image/' + uploadImgName
     os.system(cmd)
     # image_class stores image class information: [#green, #red]
-    f = open(path + "FaceMaskDetection/tmp/img_info.txt", "r")
+    f = open(webapp.config['APP_PATH'] + "FaceMaskDetection/tmp/img_info.txt", "r")
     image_class = [0, 0]
     image_info = f.readline()
     image_info_list = image_info.split('[')
