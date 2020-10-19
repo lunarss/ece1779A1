@@ -21,14 +21,14 @@ def upload_form():
 def file_upload():
     # check if the post request has the file part
     if ('uploadedfile' not in request.files) and (request.args.get('imageUrl') == ''):
-        return "Missing uploaded file"
+        return render_template('/fileupload/form.html', error_msg="Missing uploaded file")
     
     if 'uploadedfile' in request.files:
         new_file = request.files['uploadedfile']
         # if user does not select file, browser also
         # submit a empty part without filename
         if new_file.filename == '':
-            return 'Missing file name'
+            return render_template('/fileupload/form.html', error_msg='Missing file name')
         # set upload image name
         uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + new_file.filename
         # save image
@@ -44,10 +44,10 @@ def file_upload():
             req = urllib2.Request(request.args.get('imageUrl'), headers=headers)
             response = urllib2.urlopen(req)
         except Exception:
-            return "Invalid Url link"
+            return render_template('/fileupload/form.html', error_msg="Invalid Url link")
         mimetype, encoding = mimetypes.guess_type(request.args.get('imageUrl'))
         if not ((mimetype and mimetype.startswith('image')) and response.code in range(200, 209)):
-            return "Invalid Image Url"
+            return render_template('/fileupload/form.html', error_msg="Invalid Image Url")
         
         # get image from Url
         r = requests.get(request.args.get('imageUrl'))
@@ -61,7 +61,7 @@ def file_upload():
     # check image size
     if os.stat(webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName).st_size > (64 * 1024 * 1024):
         os.system('rm ' + webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName)
-        return 'File too large'
+        return render_template('/fileupload/form.html', error_msg='File too large')
         
     # change cwd for linux command execution
     os.chdir(webapp.config['APP_PATH'] + 'FaceMaskDetection/')
