@@ -6,6 +6,8 @@ import time
 import tempfile
 import os
 import requests
+import mimetypes
+import urllib.request as urllib2
 
 
 @webapp.route('/test/FileUpload/form',methods=['GET'])
@@ -32,14 +34,29 @@ def file_upload():
         # save image
         new_file.save(os.path.join(webapp.config['APP_PATH'],'Upload_Image/', uploadImgName))
     else:
+        # validate image Url
+        try:
+            headers = {
+                "Range": "bytes=0-10",
+                "User-Agent": "MyTestAgent",
+                "Accept": "*/*"
+            }
+            req = urllib2.Request(request.args.get('imageUrl'), headers=headers)
+            response = urllib2.urlopen(req)
+        except Exception:
+            return "Invalid Url link"
+        mimetype, encoding = mimetypes.guess_type(request.args.get('imageUrl'))
+        if not ((mimetype and mimetype.startswith('image')) and response.code in range(200, 209)):
+            return "Invalid Image Url"
+        
         # get image from Url
         r = requests.get(request.args.get('imageUrl'))
+        print(r)
         # set Url image name
         uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + request.args.get('imageUrl').split('/')[-1]
         # save image
         with open(webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName, 'wb') as f:
             f.write(r.content)
-
         
     # A1 codes starts
     # check image size
@@ -159,10 +176,10 @@ def test_api():
         error_msg = "File too large"
         rsp = {"success": "false", 
                "error": {
-                   "code": 400,
+                   "code": 413,
                    "message": error_msg
                }}
-        return jsonify(rsp), 400
+        return jsonify(rsp), 413
         
     # change cwd for linux command execution
     os.chdir(webapp.config['APP_PATH'] + 'FaceMaskDetection/')
