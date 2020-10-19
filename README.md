@@ -1,6 +1,6 @@
 # 保存上传图片path: Upload_Image
 
-# 输出测试图片path：Output_Image
+# 输出测试图片path：static
 
 # 上传后自动测试图片pyFile: FaceMaskDetection/pytorch_test.py
 
@@ -12,5 +12,3 @@
     f.close()
     # A1 codes ends
 ```    
-
-**(目前的问题是fileupload.py最后return的testImgName无法在网页上显示)**
