@@ -37,7 +37,7 @@ def file_upload():
     
     
     
-
+    
     # TODO add userID before timestamp
     uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + new_file.filename
 
@@ -98,3 +98,124 @@ def file_upload():
     # A1 codes ends
 
 
+@webapp.route('/api/upload', methods = ['POST'])
+def test_api():
+    username = request.form.get("username", "")
+    password = request.form.get("password", "")
+
+    # form format checking
+    if username == "":
+        error_msg = "You must put in a username!"
+        rsp = {"success": "false", 
+               "error": {
+                   "code": 400,
+                   "message": error_msg
+               }}
+        return jsonify(rsp), 400
+    elif password =="":
+        error_msg = "You must put in an email address!"
+        rsp = {"success":"false", 
+               "error": {
+                   "code": 400,
+                   "message": error_msg
+               }}
+        return jsonify(rsp), 400
+        
+    if 'uploadedfile' not in request.files:
+        error_msg = "Missing uploaded file"
+        rsp = {"success": "false", 
+               "error": {
+                   "code": 400,
+                   "message": error_msg
+               }}
+        return jsonify(rsp), 400
+    
+    new_file = request.files['uploadedfile']
+
+    # if user does not select file, browser also
+    # submit a empty part without filename
+    if new_file.filename == '':
+        error_msg = "Missing file name"
+        rsp = {"success": "false", 
+               "error": {
+                   "code": 400,
+                   "message": error_msg
+               }}
+        return jsonify(rsp), 400
+    
+    
+    
+    
+    
+    
+    
+    # TODO add userID before timestamp
+    uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + new_file.filename
+
+
+
+
+
+    
+    
+    
+    new_file.save(os.path.join(webapp.config['APP_PATH'],'Upload_Image/', uploadImgName))
+    # check image size
+    if os.stat(webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName).st_size > (64 * 1024 * 1024):
+        os.system('rm ' + webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName)
+        error_msg = "File too large"
+        rsp = {"success": "false", 
+               "error": {
+                   "code": 400,
+                   "message": error_msg
+               }}
+        return jsonify(rsp), 400
+        
+    # change cwd for linux command execution
+    os.chdir(webapp.config['APP_PATH'] + 'FaceMaskDetection/')
+    # run image test
+    cmd = 'python3 pytorch_test.py --img-path ../Upload_Image/' + uploadImgName
+    os.system(cmd)
+    # image_class stores image class information: [#green, #red]
+    f = open(webapp.config['APP_PATH'] + "FaceMaskDetection/tmp/img_info.txt", "r")
+    image_class = [0, 0]
+    image_info = f.readline()
+    image_info_list = image_info.split('[')
+    for i in range(len(image_info_list)-1):
+	    if image_info_list[i+1][0] == '0':
+	        image_class[0] += 1
+	    elif image_info_list[i+1][0] == '1':
+	        image_class[1] += 1
+    f.close()
+    # determine image category
+    image_category = 0
+    image_class_str = ''
+    # no face detected
+    if (image_class[0] == 0) and (image_class[1] == 0):
+        image_category = 1
+        image_class_str = 'no face detected'
+    # all wearing masks
+    elif (not image_class[0] == 0) and (image_class[1] == 0):
+        image_category = 2
+        image_class_str = 'all wearing masks'
+    # no one wearing mask
+    elif (image_class[0] == 0) and (not image_class[1] == 0):
+        image_category = 3
+        image_class_str = 'no one wearing mask'
+    # some faces wearing masks
+    elif (not image_class[0] == 0) and (not image_class[1] == 0):
+        image_category = 4
+        image_class_str = 'some faces wearing masks'
+    # delete temporary files
+    os.system('rm tmp/img_info.txt')
+    os.system('mv tmp/test_' + uploadImgName + ' ../static/test_' + uploadImgName)
+    num_faces = image_class[0] + image_class[1]
+    
+    rsp = {"success": "true",
+            "payload": {
+                        "num_faces": num_faces,
+                        "num_masked": image_class[0],
+                        "num_unmasked": image_class[1]
+                        }
+            }
+    return jsonify(rsp), 201
