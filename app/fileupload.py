@@ -51,7 +51,6 @@ def file_upload():
         
         # get image from Url
         r = requests.get(request.args.get('imageUrl'))
-        print(r)
         # set Url image name
         uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + request.args.get('imageUrl').split('/')[-1]
         # save image
