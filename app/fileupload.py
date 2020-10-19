@@ -5,6 +5,7 @@ from datetime import datetime
 import time
 import tempfile
 import os
+import requests
 
 
 @webapp.route('/test/FileUpload/form',methods=['GET'])
@@ -13,42 +14,34 @@ def upload_form():
     return render_template("fileupload/form.html")
 
 
-@webapp.route('/test/FileUpload',methods=['POST'])
+@webapp.route('/test/FileUpload',methods=['GET','POST'])
 #Upload a new file and store in the systems temp directory
 def file_upload():
     # check if the post request has the file part
-    if 'uploadedfile' not in request.files:
+    if ('uploadedfile' not in request.files) and (request.args.get('imageUrl') == ''):
         return "Missing uploaded file"
     
-    new_file = request.files['uploadedfile']
+    if 'uploadedfile' in request.files:
+        new_file = request.files['uploadedfile']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if new_file.filename == '':
+            return 'Missing file name'
+        # set upload image name
+        uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + new_file.filename
+        # save image
+        new_file.save(os.path.join(webapp.config['APP_PATH'],'Upload_Image/', uploadImgName))
+    else:
+        # get image from Url
+        r = requests.get(request.args.get('imageUrl'))
+        # set Url image name
+        uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + request.args.get('imageUrl').split('/')[-1]
+        # save image
+        with open(webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName, 'wb') as f:
+            f.write(r.content)
 
-    # if user does not select file, browser also
-    # submit a empty part without filename
-    if new_file.filename == '':
-        return 'Missing file name'
-    
+        
     # A1 codes starts
-    # save upload image
-    
-    
-
-
-    
-    
-    
-    
-    
-    # TODO add userID before timestamp
-    uploadImgName = datetime.now().strftime("%m%d%Y%H%M%S") + new_file.filename
-
-
-
-
-
-    
-    
-    
-    new_file.save(os.path.join(webapp.config['APP_PATH'],'Upload_Image/', uploadImgName))
     # check image size
     if os.stat(webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName).st_size > (64 * 1024 * 1024):
         os.system('rm ' + webapp.config['APP_PATH'] + 'Upload_Image/' + uploadImgName)
