@@ -95,7 +95,7 @@ def inference(image,
     
     # A1 codes starts
     # save test image
-    cv2.imwrite('tmp/' + 'test_' + image_name.split('/')[-1], image)
+    cv2.imwrite('tmp/test_' + image_name.split('/')[-1], image)
     # A1 codes ends
     
     return output_info
