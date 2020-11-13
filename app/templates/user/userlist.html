@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <form action = "{{url_for('user_create')}}" method = "get">
+        <input type = "submit" value = "Create a new user">
+    </form>
+
+    <table>
+        <thread>
+            <th>Username
+            <th>User email</th>
+            <th></th>
+        </thread>
+        
+
+        {% for row in cursor %}
+        <tr>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}}</td>
+            <td>
+                <form action = "{{url_for('user_delete', id = row[0])}}", method = 'post', onsubmit='return confirm("Are you sure to delete this user?")'>
+                    <input type = "submit" value = "Delete">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="error">{{error_msg if error_msg != None}}</div>
+{% endblock %}

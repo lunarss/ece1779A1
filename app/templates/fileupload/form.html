@@ -6,6 +6,11 @@
 
   <body>
     <h1>Upload Image</h1>
+    <div style="padding: 0px 0px 16px 0px">
+      <form action="{{url_for('main')}}" method='get'>
+          <input type='submit' value='Home Page'/ >
+      </form>
+    </div>
      <form action="/test/FileUpload"  enctype="multipart/form-data" method="post">
 
    	  What is the image files to upload? <input type="file" name="uploadedfile" accept="image/*"><br />

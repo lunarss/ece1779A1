@@ -114,7 +114,8 @@ if __name__ == "__main__":
     
     # A1 codes starts
     # save test image information into temporary files
-    f = open("tmp/img_info.txt", "a")
+    f = open("tmp/img_info.txt", "w")
+    print("I reached here.\n")
     f.write(", ".join(map(str,output_info))+'\n')
     f.close()
     # A1 codes ends

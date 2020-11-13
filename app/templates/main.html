@@ -1,9 +1,44 @@
 <!DOCTYPE html>
-<head>
-    <title>Upload Image</title>
-</head>
 <html>
+    <head>
+        <title>Main Page</title>
+    </head>
     <body>
-        <div><a href="{{url_for('upload_form')}}">Image Upload</a></div>
-    <body>    
+        <h1>Home</h1>
+
+        <div class="error">{{error_msg if error_msg != None}}</div>
+
+        <ul>
+            <li>
+                <form action = "{{url_for('user_list')}}" method = "get">
+                    <input type = "submit" value = "User Management">
+                </form>
+            </li>
+
+            <li>
+                <form action = "{{url_for('password_change')}}" method = "get">
+                    <input type = "submit" value = "Change your password">
+                </form>
+            </li>
+
+            <li>
+                <form action = "{{url_for('upload_form')}}" method = "get">
+                    <input type = "submit" value = "Mask Detection">
+                </form>
+            </li>
+
+            <li>
+                <form action = "{{url_for('history')}}" method = "get">
+                    <input type = "submit" value = "Show Upload History">
+                </form>
+            </li>
+
+            <li>
+            <form action = "{{url_for('logout')}}">
+                <input type = "submit" value = "Logout">
+            </form>
+            </li>
+        </ul>
+    </body>
+
 </html>

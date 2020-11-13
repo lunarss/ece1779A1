@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    <form action = "{{url_for('user_create')}}" method = "post">
+
+        <div>
+            <label>Username</label>
+        </div>
+        <div>
+            <input type="text" name="username" value="{{username if username != None}}">
+        </div>
+
+        <div>
+            <label>Email address</label>
+        </div>
+        <div>
+            <input type="text" name="email_address" value="{{email_address if email_address != None}}">
+        </div>
+
+        <div>
+            <input type = "submit" value = "Create">
+            <input type = "reset">
+        </div>
+    </form>
+    <div class="error">{{error_msg if error_msg != None}}</div>
+
+{% endblock %}

@@ -1,0 +1,222 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {box-sizing: border-box}
+
+/* Set height of body and the document to 100% */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial;
+}
+
+/* Style tab links */
+.tablink {
+  background-color: #555;
+  color: black;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 25%;
+}
+
+.tablink:hover {
+  background-color: #777;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+  color: black;
+  display: none;
+  padding: 100px 0px;
+  height: 100%;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 100%; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+
+
+  display: table;
+  clear: both;
+}
+
+
+#Home {background-color: red;}
+#News {background-color: green;}
+#Contact {background-color: blue;}
+#About {background-color: orange;}
+</style>
+</head>
+<body>
+<div style="padding: 0px 0px 16px 0px">
+  <form action="{{url_for('main')}}" method='get'>
+      <input type='submit' value='Home Page'/ >
+  </form>
+</div>
+<button class="tablink" onclick="openPage('Home', this, 'red')">No face Detected</button>
+<button class="tablink" onclick="openPage('News', this, 'green')" id="defaultOpen">All wearing masks</button>
+<button class="tablink" onclick="openPage('Contact', this, 'blue')">No one wearing mask</button>
+<button class="tablink" onclick="openPage('About', this, 'orange')">Some wearing masks</button>
+
+<div id="Home" class="tabcontent">
+  <p>
+    <div class="row">
+  <div class="column" style="background-color:red;">
+
+    <p>
+       <h1>Original image</h1>
+     <td>
+                    {% for i in beforeAI[0] %}
+                    <image src="{{url_for('static',filename=i)}}" width="260" height="320"/>
+               <br>
+         <br>
+           {% endfor %}
+                </td>
+</p>
+  </div>
+  <div class="column" style="background-color:red;">
+    <p>
+              <h1>After processing</h1>
+     <td>
+                    {% for i in afterAI[0] %}
+                    <image src="{{url_for('static',filename=i)}}" width="260" height="320"/>
+                <br>
+         <br>
+         {% endfor %}
+                </td>
+    </p>
+  </div>
+</div>
+</div>
+
+<div id="News" class="tabcontent">
+  <p>
+    <div class="row">
+  <div class="column" style="background-color:green;">
+
+    <p>
+       <h1>Original image</h1>
+     <td>
+                    {% for i in beforeAI[1] %}
+                    <image src="{{url_for('static',filename=i)}}" width="260" height="320"/>
+               <br>
+         <br>
+           {% endfor %}
+                </td>
+</p>
+  </div>
+  <div class="column" style="background-color:green;">
+    <p>
+              <h1>After processing</h1>
+     <td>
+                    {% for i in afterAI[1] %}
+                    <image src="{{url_for('static',filename=i)}}" width="260" height="320"/>
+                <br>
+         <br>
+         {% endfor %}
+                </td>
+    </p>
+  </div>
+</div>
+</div>
+
+<div id="Contact" class="tabcontent">
+  <p>
+    <div class="row">
+  <div class="column" style="background-color:blue;">
+
+    <p>
+       <h1>Original image</h1>
+     <td>
+                    {% for i in beforeAI[2] %}
+                    <image src="{{url_for('static',filename=i)}}" width="260" height="320"/>
+               <br>
+         <br>
+           {% endfor %}
+                </td>
+</p>
+  </div>
+  <div class="column" style="background-color:blue">
+    <p>
+              <h1>After processing</h1>
+     <td>
+                    {% for i in afterAI[2] %}
+                    <image src="{{url_for('static',filename=i)}}" width="260" height="320"/>
+                <br>
+         <br>
+         {% endfor %}
+                </td>
+    </p>
+  </div>
+</div>
+</div>
+
+<div id="About" class="tabcontent">
+  <p>
+    <div class="row">
+  <div class="column" style="background-color:orange;">
+
+    <p>
+       <h1>Original image</h1>
+     <td>
+                    {% for i in beforeAI[3] %}
+                    <image src="{{url_for('static',filename=i)}}" width="260" height="320"/>
+               <br>
+         <br>
+           {% endfor %}
+                </td>
+</p>
+  </div>
+  <div class="column" style="background-color:orange;">
+    <p>
+              <h1>After processing</h1>
+     <td>
+                    {% for i in afterAI[3] %}
+                    <image src="{{url_for('static',filename=i)}}" width="260" height="320"/>
+                <br>
+         <br>
+         {% endfor %}
+                </td>
+    </p>
+  </div>
+</div>
+</div>
+
+<script>
+function openPage(pageName,elmnt,color) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.backgroundColor = "";
+  }
+  document.getElementById(pageName).style.display = "block";
+  elmnt.style.backgroundColor = color;
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+
+</body>
+</html>
+

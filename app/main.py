@@ -1,7 +1,14 @@
-from flask import render_template, url_for
-from app import webapp
-#import datetime
+from flask import render_template, session
 
-@webapp.route('/')
+from app import webapp
+
+# webapp.secret_key = ajsdadbwa'xfadad\fea]'
+
+@webapp.route('/index',methods=['GET'])
+@webapp.route('/main',methods=['GET'])
 def main():
-    return render_template("main.html")
+    if 'username' in session:
+
+        return render_template("main.html")
+
+    return render_template("/login/login.html", error_msg = "Please sign in first.")
